@@ -8,8 +8,8 @@ void resetTavolaGioco(int tavola[][COLONNE]); //Imposta tutte le caselle a VUOTO
 
 void stampaTavolaDiGioco(int tavola[][COLONNE]);
 
-bool salvaTavolaSuFile(const char* filename, int tavola[][COLONNE]);
+bool salvaTavolaSuFile(const char* filename, int tavola[][COLONNE], char nomeGiocatore[], int punteggio);
 
-bool caricaTavolaDaFile(const char* filename, int tavola[][COLONNE]);
+bool caricaTavolaDaFile(const char* filename, int tavola[][COLONNE], char nomeGiocatore[], int *punteggio);
 
 #endif // TAVOLADIGIOCO_H_INCLUDED

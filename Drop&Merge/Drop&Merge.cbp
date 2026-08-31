@@ -31,7 +31,23 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="Classifica.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Classifica.h" />
 		<Unit filename="Constants.h" />
+		<Unit filename="Giocatori.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Giocatori.h" />
+		<Unit filename="Menu.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Menu.h" />
+		<Unit filename="Partita.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Partita.h" />
 		<Unit filename="TavolaDiGioco.c">
 			<Option compilerVar="CC" />
 		</Unit>

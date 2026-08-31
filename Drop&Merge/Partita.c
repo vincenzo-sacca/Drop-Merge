@@ -3,7 +3,7 @@
 #include "Partita.h"
 #include "TavolaDiGioco.h"
 
-void resetPartita(int tavola[RIGHE][COLONNE], int *punteggio) {
+void resetPartita(int tavola[][COLONNE], int *punteggio) {
     resetTavolaGioco(tavola);
     if (punteggio != NULL) {
         *punteggio = 0;
@@ -12,26 +12,26 @@ void resetPartita(int tavola[RIGHE][COLONNE], int *punteggio) {
 
 int generaNumeroCasuale(void) {
     int r = rand() % 100;
-    if (r < 75) {
-        return 2; //75% di probabilita'
+    if (r < 50) {
+        return 2; //50% di probabilita'
     } else {
-        return 4;//25% di probabilita'
+        return 4;//50% di probabilita'
     }
 }
 
 //controllo per la colonna scelta dall'utente
-int isColonnaValida(int tavola[RIGHE][COLONNE], int colonna) {
-    if (colonna < 0 || colonna >= COLONNE) {
+int isColonnaValida(int tavola[][COLONNE], int colonna) {
+    if (colonna <= 0 || colonna > COLONNE) {
         return 0;
     }
-    if (tavola[0][colonna] != VUOTO) {
+    if (tavola[0][colonna-1] != VUOTO) {
         return 0;
     }
     return 1;
 }
 
 
-static int applicaGravita(int tavola[RIGHE][COLONNE]) {
+static int applicaGravita(int tavola[][COLONNE]) {
     int avvenutoSpostamento = 0;
 
     for (int j = 0; j < COLONNE; j++) {
@@ -52,7 +52,7 @@ static int applicaGravita(int tavola[RIGHE][COLONNE]) {
 }
 
 
-static int controllaEFondi(int tavola[RIGHE][COLONNE], int *punteggio) {
+static int controllaEFondi(int tavola[][COLONNE], int *punteggio) {
     int avvenutaFusione = 0;
 
 
@@ -88,7 +88,7 @@ static int controllaEFondi(int tavola[RIGHE][COLONNE], int *punteggio) {
 }
 
 
-void eseguiMossa(int tavola[RIGHE][COLONNE], int colonna, int valore, int *punteggio) {
+void eseguiMossa(int tavola[][COLONNE], int colonna, int valore, int *punteggio) {
     for (int i = RIGHE - 1; i >= 0; i--) {
         if (tavola[i][colonna] == VUOTO) {
             tavola[i][colonna] = valore;
@@ -106,12 +106,53 @@ void eseguiMossa(int tavola[RIGHE][COLONNE], int colonna, int valore, int *punte
     }
 }
 
+void giocaPartita(int tavola[][COLONNE],int *punteggio, char nomeGiocatore[]){
+    bool gameOver=0;
+    int colonna_scelta, numero;
+    //resetPartita(tavola, &punteggio); da inserire nel main perchè se carico una partita da file non serve
+    stampaTavolaDiGioco(tavola);
+    printf("Per salvare la partita alla mossa desiderata premere 0");
+    do{
+        numero = generaNumeroCasuale();
+        printf("numero: %d --- scegliere colona: ", numero);
+        scanf("%d", &colonna_scelta);
 
-int isGameOver(int tavola[RIGHE][COLONNE]) {
+        if(colonna_scelta==0){
+                char fileName[DIM_GIOC];
+                printf("\nIndicare il nome del file su cui salvare la partita in corso: ");
+                scanf("%s", fileName);
+                salvaTavolaSuFile(fileName, tavola, nomeGiocatore, *punteggio);
+                return;
+        }
+
+        while(!isColonnaValida(tavola, colonna_scelta)){
+            printf("Inserire un valore valido: ");
+            scanf("%d", &colonna_scelta);
+            if(colonna_scelta==0){
+                char fileName[DIM_GIOC];
+                printf("\nIndicare il nome del file su cui salvare la partita in corso: ");
+                scanf("%s", fileName);
+                salvaTavolaSuFile(fileName, tavola, nomeGiocatore, *punteggio);
+                return;
+            }
+        }
+
+
+        colonna_scelta--;
+
+        eseguiMossa(tavola, colonna_scelta, numero, punteggio);
+        stampaTavolaDiGioco(tavola);
+        gameOver=isGameOver(tavola);
+    }while(gameOver==false);
+    printf("\n--- GAME-OVER ---");
+
+}
+
+bool isGameOver(int tavola[][COLONNE]) {
     for (int j = 0; j < COLONNE; j++) {
         if (tavola[0][j] == VUOTO) {
-            return 0;
+            return false;
         }
     }
-    return 1; //game over
+    return true; //game over
 }

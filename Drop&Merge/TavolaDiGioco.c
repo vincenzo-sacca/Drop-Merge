@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <string.h>
 
+#include <stdbool.h>
 #include "Constants.h"
 #include "TavolaDiGioco.h"
 
@@ -52,14 +53,17 @@ void stampaTavolaDiGioco(int tavola[][COLONNE]) {
 }
 
 
-bool salvaTavolaSuFile(const char* filename, int tavola[][COLONNE]) {
-    FILE *fp = fopen(filename, "w");
+bool salvaTavolaSuFile(const char* fileName, int tavola[][COLONNE], char nomeGiocatore[], int punteggio) {
+    FILE *fp = fopen(fileName, "w");
     if (fp == NULL) {
-        printf("ERRORE: Impossibile creare o aprire il file %s per il salvataggio.\n", filename);
+        printf("ERRORE: Impossibile creare o aprire il file %s per il salvataggio.\n", fileName);
         return false;
     }
 
     int i, j;
+
+    fprintf(fp, "%s %d\n", nomeGiocatore, punteggio);
+
     for (i = 0; i < RIGHE; i++) {
         for (j = 0; j < COLONNE; j++) {
             fprintf(fp, "%d ", tavola[i][j]);
@@ -72,12 +76,18 @@ bool salvaTavolaSuFile(const char* filename, int tavola[][COLONNE]) {
 }
 
 
-bool caricaTavolaDaFile(const char* filename, int tavola[][COLONNE]) {
-    FILE *fp = fopen(filename, "r");
+bool caricaTavolaDaFile(const char* fileName, int tavola[][COLONNE], char nomeGiocatore[], int *punteggio) {
+    FILE *fp = fopen(fileName, "r");
     if (fp == NULL) {
-        printf("ERRORE: File %s non trovato o non accessibile.\n", filename);
+        printf("ERRORE: File %s non trovato o non accessibile.\n", fileName);
         return false;
     }
+
+    if (fscanf(fp, "%s %d", nomeGiocatore, punteggio) != 2) {
+        printf("Errore nel formato dei dati iniziali nel file.\n");
+        fclose(fp);
+        return false;
+        }
 
     int i, j;
     int valoreLetto;
@@ -96,7 +106,7 @@ bool caricaTavolaDaFile(const char* filename, int tavola[][COLONNE]) {
     fclose(fp);
 
     if (!tavolaValida) {
-        printf("ERRORE\n", filename, RIGHE, COLONNE);
+        printf("ERRORE\n");
         resetTavolaGioco(tavola);
         return false;
     }
