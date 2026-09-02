@@ -11,6 +11,16 @@ bool caricaClassifica(const char* filename) {
     classifica = createList();
     FILE *f = fopen(filename, "r");
     bool loaded = false;
+    if (f == NULL) {
+        FILE *crea = fopen(filename, "w");
+        if (crea != NULL) {
+            fclose(crea);
+            f = fopen(filename, "r");
+        } else {
+            printf("ERRORE: Impossibile creare il file %s\n", filename);
+            return loaded;
+        }
+    }
     if (f != NULL) {
         Giocatore gCurr;
         while(fscanf(f, "%s%d", gCurr.nome, &gCurr.punteggio) != EOF)
@@ -19,8 +29,6 @@ bool caricaClassifica(const char* filename) {
         fclose(f);
         loaded = true;
     }
-    else
-        printf("ERRORE di apertura del file %s\n", filename);
     return loaded;
 
 }
@@ -63,5 +71,7 @@ void aggiungiPuntiAGiocatore(const char* giocatore, int punti) {
 }
 
 void stampaClassifica() {
+    printf("\n");
     printList(classifica);
+    printf("\n");
 }

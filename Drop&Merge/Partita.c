@@ -31,7 +31,7 @@ int isColonnaValida(int tavola[][COLONNE], int colonna) {
 }
 
 
-static int applicaGravita(int tavola[][COLONNE]) {
+int applicaGravita(int tavola[][COLONNE]) {
     int avvenutoSpostamento = 0;
 
     for (int j = 0; j < COLONNE; j++) {
@@ -52,35 +52,36 @@ static int applicaGravita(int tavola[][COLONNE]) {
 }
 
 
-static int controllaEFondi(int tavola[][COLONNE], int *punteggio) {
+int controllaEFondi(int tavola[][COLONNE], int *punteggio) {
     int avvenutaFusione = 0;
 
 
     for (int i = RIGHE - 1; i >= 0; i--) {
-        for (int j = 0; j < COLONNE; j++) {
+        for (int j = COLONNE-1; j >=0 ; j--) {
             if (tavola[i][j] != VUOTO) {
-
-                //controllo se il blocco sotto contiene lo stesso numero
-                if (i + 1 < RIGHE && tavola[i + 1][j] == tavola[i][j]) {
-                    tavola[i + 1][j] = tavola[i + 1][j]*2;
-                    *punteggio = *punteggio + tavola[i + 1][j];
-                    tavola[i][j] = VUOTO;
-                    avvenutaFusione = 1;
-                }
                 //controllo se il blocco a sinistra contiene lo stesso numero
-                else if (j - 1 >= 0 && tavola[i][j - 1] == tavola[i][j]) {
+                if (j - 1 >= 0 && tavola[i][j - 1] == tavola[i][j]) {
                     tavola[i][j] = tavola[i][j]*2;
                     *punteggio = *punteggio + tavola[i][j];
                     tavola[i][j - 1] = VUOTO;
                     avvenutaFusione = 1;
                 }
-                //controllo se il blocco a destra contiene lo stesso numero
+
+                //controllo se il blocco sotto contiene lo stesso numero
+                else if (i + 1 < RIGHE && tavola[i + 1][j] == tavola[i][j]) {
+                    tavola[i + 1][j] = tavola[i + 1][j]*2;
+                    *punteggio = *punteggio + tavola[i + 1][j];
+                    tavola[i][j] = VUOTO;
+                    avvenutaFusione = 1;
+                }
+
+                /*controllo se il blocco a destra contiene lo stesso numero
                 else if (j + 1 < COLONNE && tavola[i][j + 1] == tavola[i][j]) {
                     tavola[i][j] = tavola[i][j]*2;
                     *punteggio = *punteggio + tavola[i][j];
                     tavola[i][j + 1] = VUOTO;
                     avvenutaFusione = 1;
-                }
+                }*/
             }
         }
     }
@@ -111,10 +112,10 @@ void giocaPartita(int tavola[][COLONNE],int *punteggio, char nomeGiocatore[]){
     int colonna_scelta, numero;
     //resetPartita(tavola, &punteggio); da inserire nel main perchè se carico una partita da file non serve
     stampaTavolaDiGioco(tavola);
-    printf("Per salvare la partita alla mossa desiderata premere 0");
+    printf("Per salvare la partita alla mossa desiderata premere 0, per abbandonare -1");
     do{
         numero = generaNumeroCasuale();
-        printf("numero: %d --- scegliere colona: ", numero);
+        printf("\nnumero: %d --- scegliere colona: ", numero);
         scanf("%d", &colonna_scelta);
 
         if(colonna_scelta==0){
@@ -122,6 +123,9 @@ void giocaPartita(int tavola[][COLONNE],int *punteggio, char nomeGiocatore[]){
                 printf("\nIndicare il nome del file su cui salvare la partita in corso: ");
                 scanf("%s", fileName);
                 salvaTavolaSuFile(fileName, tavola, nomeGiocatore, *punteggio);
+                return;
+        }
+         if(colonna_scelta==-1){
                 return;
         }
 

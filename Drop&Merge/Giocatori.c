@@ -143,7 +143,7 @@ void printList(List l) {
 
     while(curr != NULL) {
 
-        printf("%s (%d)\n", curr->player.nome, curr->player.punteggio);
+        printf("%s, punti: %d\n", curr->player.nome, curr->player.punteggio);
 
         curr = curr->next;
     }

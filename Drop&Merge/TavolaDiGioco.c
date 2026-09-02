@@ -56,7 +56,7 @@ void stampaTavolaDiGioco(int tavola[][COLONNE]) {
 bool salvaTavolaSuFile(const char* fileName, int tavola[][COLONNE], char nomeGiocatore[], int punteggio) {
     FILE *fp = fopen(fileName, "w");
     if (fp == NULL) {
-        printf("ERRORE: Impossibile creare o aprire il file %s per il salvataggio.\n", fileName);
+        printf("\nERRORE: Impossibile creare o aprire il file %s per il salvataggio.", fileName);
         return false;
     }
 
@@ -79,12 +79,12 @@ bool salvaTavolaSuFile(const char* fileName, int tavola[][COLONNE], char nomeGio
 bool caricaTavolaDaFile(const char* fileName, int tavola[][COLONNE], char nomeGiocatore[], int *punteggio) {
     FILE *fp = fopen(fileName, "r");
     if (fp == NULL) {
-        printf("ERRORE: File %s non trovato o non accessibile.\n", fileName);
+        printf("\nERRORE: File %s non trovato o non accessibile.", fileName);
         return false;
     }
 
     if (fscanf(fp, "%s %d", nomeGiocatore, punteggio) != 2) {
-        printf("Errore nel formato dei dati iniziali nel file.\n");
+        printf("\nErrore nel formato dei dati iniziali nel file.");
         fclose(fp);
         return false;
         }

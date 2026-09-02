@@ -4,16 +4,16 @@
 
 void mostraMenuGrafico(void) {
     printf("\n");
-    printf("|=====================================|\n");
+    printf("=======================================\n");
     printf("|         DROP & MERGE - 2048         |\n");
-    printf("======================================|\n");
+    printf("=======================================\n");
     printf("|                                     |\n");
     printf("|     [1] Nuova Partita               |\n");
     printf("|     [2] Visualizza Classifica       |\n");
     printf("|     [3] Carica Partita Precedente   |\n");
     printf("|     [0] Esci dal Gioco              |\n");
     printf("|                                     |\n");
-    printf("|=====================================|\n");
+    printf("=======================================\n");
     printf("Seleziona un'opzione: ");
 }
 
